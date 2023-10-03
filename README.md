@@ -1,4 +1,8 @@
-# Elysia with Bun runtime
+# URUBU DO PIX (BUN)
+
+<div align=center>
+  <img src="https://github.com/iamthepoe/urubu-do-pix-api/blob/main/diagrams/urubu_do_pix.drawio.png"></img>
+</div>
 
 ## Getting Started
 To get started with this template, simply paste this command into your terminal:
