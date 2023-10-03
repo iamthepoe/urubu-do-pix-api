@@ -3,6 +3,8 @@ export interface CreateUserDTO {
   code: string;
 }
 
+export type UpdateUserDTO = Partial<CreateUserDTO>;
+
 export interface UserEntity {
   id: number;
   name: string;
