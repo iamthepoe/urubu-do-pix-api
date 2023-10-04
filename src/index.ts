@@ -1,5 +1,6 @@
 import { Elysia, t } from "elysia";
 import { createDatabaseClient, createUserService } from "./factories";
+import { CreateUserDTO } from "./models/user.model";
 
 createDatabaseClient().init().then(() => true);
 
@@ -10,12 +11,7 @@ const app = new Elysia();
 app.get("/", () => "Hello World!");
 
 app.group('/user', app => app
-  .post('/sign-up', ({ body }) => userService.create(body), {
-    body: t.Object({
-      name: t.String(),
-      code: t.String()
-    })
-  })
+  .post('/sign-up', ({ body }) => userService.create(body), { body: CreateUserDTO })
 )
 
 app.listen(3000);
