@@ -1,5 +1,5 @@
 import { Database } from 'bun:sqlite';
-import { CreateUserDTO, UserEntity } from '../types';
+import { CreateUserDTO, UserEntity, UpdateUserDTO } from '../types';
 
 export class UserRepository {
   constructor(private readonly db: Database) { }
@@ -12,8 +12,20 @@ export class UserRepository {
     return this.db.query(`INSERT INTO user (name, code) VALUES (?, ?) RETURNING id`).get(user.name, user.code) as UserEntity;
   }
 
-  async update(id: number, user: CreateUserDTO) {
-    return this.db.run(`UPDATE user SET name = '${user.name}', code = '${user.code}' WHERE id = ${id}`);
+  async update(id: number, user: UpdateUserDTO) {
+    if (!user?.name && !user?.code) return;
+
+    let query = 'UPDATE user SET ';
+
+    if (user?.name) query += `name = ${user.name},`;
+
+    if (user?.code) query += `code = ${user.code},`;
+
+    query = query.slice(0, -1);
+
+    query += ` WHERE id = ${id}`;
+
+    return this.db.run(query);
   }
 
   async delete(id: number) {
@@ -25,6 +37,6 @@ export class UserRepository {
   }
 
   async getByName(name: string) {
-    return this.db.query(`SELECT * FROM user WHERE name = ?`).get(name);
+    return this.db.query(`SELECT * FROM user WHERE name = ?`).get(name) as UserEntity;
   }
 }
