@@ -14,10 +14,10 @@ export class OrderRepository {
       .get(order.userId, order.value) as number;
   }
 
-  async update(id: number, order: UpdateOrderDTO) {
+  async update(userId: number, order: UpdateOrderDTO) {
     if (!order?.value) return;
 
-    let query = `UPDATE deposit SET value = ${order.value} WHERE id = ${id}`;
+    let query = `UPDATE deposit SET value = ${order.value} WHERE user_id = ${userId}`;
 
     return this.db.run(query);
   }

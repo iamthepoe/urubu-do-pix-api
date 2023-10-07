@@ -3,6 +3,7 @@ import { DatabaseClient } from "../database/database";
 import { UserRepository } from "../repositories/user.repository";
 import { UserService } from "../services/user.service";
 import { DepositRepository } from "../repositories/deposit.repository";
+import { OrderRepository } from "../repositories/order.repository";
 
 const db = new Database("urubu.db");
 
@@ -20,4 +21,8 @@ export const createUserService = () => {
 
 export const createDepositRepository = () => {
   return new DepositRepository(db);
+};
+
+export const createOrderRepository = () => {
+  return new OrderRepository(db);
 };
