@@ -4,6 +4,7 @@ import { UserRepository } from "../repositories/user.repository";
 import { UserService } from "../services/user.service";
 import { DepositRepository } from "../repositories/deposit.repository";
 import { OrderRepository } from "../repositories/order.repository";
+import { OrderService } from "../services/order.service";
 
 const db = new Database("urubu.db");
 
@@ -16,7 +17,7 @@ export const createUserRepository = () => {
 };
 
 export const createUserService = () => {
-  return new UserService(createUserRepository());
+  return new UserService(createUserRepository(), createOrderService());
 };
 
 export const createDepositRepository = () => {
@@ -25,4 +26,8 @@ export const createDepositRepository = () => {
 
 export const createOrderRepository = () => {
   return new OrderRepository(db);
+};
+
+export const createOrderService = () => {
+  return new OrderService(createOrderRepository());
 };

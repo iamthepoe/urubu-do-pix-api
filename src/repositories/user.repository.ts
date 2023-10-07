@@ -1,21 +1,23 @@
-import { Database } from 'bun:sqlite';
-import { CreateUserDTO, UserEntity, UpdateUserDTO } from '../types';
+import { Database } from "bun:sqlite";
+import { CreateUserDTO, UserEntity, UpdateUserDTO } from "../types";
 
 export class UserRepository {
-  constructor(private readonly db: Database) { }
+  constructor(private readonly db: Database) {}
 
   async getUsers() {
-    return this.db.query('SELECT * FROM user').all();
+    return this.db.query("SELECT * FROM user").all();
   }
 
   async create(user: CreateUserDTO) {
-    return this.db.query(`INSERT INTO user (name, code) VALUES (?, ?) RETURNING id`).get(user.name, user.code) as UserEntity;
+    return this.db
+      .query(`INSERT INTO user (name, code) VALUES (?, ?) RETURNING id`)
+      .get(user.name, user.code) as number;
   }
 
   async update(id: number, user: UpdateUserDTO) {
     if (!user?.name && !user?.code) return;
 
-    let query = 'UPDATE user SET ';
+    let query = "UPDATE user SET ";
 
     if (user?.name) query += `name = ${user.name},`;
 
@@ -33,10 +35,14 @@ export class UserRepository {
   }
 
   async getUser(id: number) {
-    return this.db.query(`SELECT * FROM user WHERE id=${id}`).get() as UserEntity;
+    return this.db
+      .query(`SELECT * FROM user WHERE id=${id}`)
+      .get() as UserEntity;
   }
 
   async getByName(name: string) {
-    return this.db.query(`SELECT * FROM user WHERE name = ?`).get(name) as UserEntity;
+    return this.db
+      .query(`SELECT * FROM user WHERE name = ?`)
+      .get(name) as UserEntity;
   }
 }
