@@ -1,20 +1,25 @@
 import { Elysia, t } from "elysia";
-import { createDatabaseClient, createUserService } from "./factories";
-import { CreateUserDTO } from "./models/user.model";
+import { createDatabaseClient } from "./factories";
+import { jwt } from "@elysiajs/jwt";
+import { users } from "./modules/users.module";
+import bearer from "@elysiajs/bearer";
 
-createDatabaseClient().init().then(() => true);
+createDatabaseClient()
+  .init()
+  .then(() => true);
 
-const userService = createUserService();
+const app = new Elysia()
+  .get("/", () => "Hello World!")
+  .use(
+    jwt({
+      name: "jwt",
+      secret: Bun.env.API_TOKEN!,
+    })
+  )
+  .use(bearer())
+  .use(users);
 
-const app = new Elysia();
-
-app.get("/", () => "Hello World!");
-
-app.group('/user', app => app
-  .post('/sign-up', ({ body }) => userService.create(body), { body: CreateUserDTO })
-)
-
-app.listen(3000);
+app.listen(Bun.env.PORT || 3000);
 
 console.log(
   `🐦 URUBU DO PIX is running at ${app.server?.hostname}:${app.server?.port}`
