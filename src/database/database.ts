@@ -1,4 +1,4 @@
-import { Database } from 'bun:sqlite';
+import { Database } from "bun:sqlite";
 
 export class DatabaseClient {
   private db: Database;
@@ -6,7 +6,7 @@ export class DatabaseClient {
   constructor(dbInstance: Database) {
     this.db = dbInstance;
     this.init()
-      .then(() => console.log('Database initialized'))
+      .then(() => console.log("Database initialized"))
       .catch(console.error);
   }
 
@@ -25,6 +25,15 @@ export class DatabaseClient {
         user_id INT,
         value FLOAT,
         date DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES user(id)
+      )
+    `);
+
+    await this.db.run(`
+      CREATE TABLE IF NOT EXISTS order (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INT,
+        value FLOAT,
         FOREIGN KEY (user_id) REFERENCES user(id)
       )
     `);
